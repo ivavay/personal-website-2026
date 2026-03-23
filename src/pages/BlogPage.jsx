@@ -105,7 +105,7 @@ export default function BlogPage() {
 
   return (
     <main className="paper-shell paper-grid text-ink">
-      <div className="grid min-h-screen lg:grid-cols-[minmax(355px,42vw)_1fr]">
+      <div className="grid min-h-screen lg:h-screen lg:grid-cols-[minmax(355px,42vw)_1fr]">
         <aside
           className={`flex min-h-screen flex-col border-b border-[#cfc2a4] lg:border-b-0 lg:border-r ${
             isMobile && selectedPost ? "hidden lg:flex" : "flex"
@@ -182,14 +182,14 @@ export default function BlogPage() {
         <section
           className={`min-h-screen flex-col ${
             isMobile && !selectedPost ? "hidden lg:flex" : "flex"
-          }`}
+          } lg:h-screen`}
         >
           <header className="grid min-h-[72px] grid-cols-[1fr_auto] items-start px-8 pt-3 sm:min-h-[138px] sm:pt-6 sm:px-10">
             <div />
             <div />
           </header>
 
-          <div className="blog-scroll flex-1 overflow-y-auto">
+          <div className="blog-scroll flex-1 overflow-y-auto lg:min-h-0">
             {selectedPost ? (
               <article className="min-h-full px-8 py-3 sm:px-10 sm:py-8 lg:px-12 lg:py-10">
                 <div className="max-w-[980px]">
