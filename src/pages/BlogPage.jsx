@@ -12,8 +12,8 @@ const filters = [
 
 export default function BlogPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [posts, setPosts] = useState(fallbackPosts);
-  const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState(() => (isSupabaseConfigured ? [] : fallbackPosts));
+  const [loading, setLoading] = useState(isSupabaseConfigured);
   const [error, setError] = useState("");
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 1024);
 
@@ -182,14 +182,14 @@ export default function BlogPage() {
         <section
           className={`min-h-screen flex-col ${
             isMobile && !selectedPost ? "hidden lg:flex" : "flex"
-          } lg:h-screen`}
+          } blog-scroll lg:h-screen lg:overflow-y-auto`}
         >
           <header className="grid min-h-[72px] grid-cols-[1fr_auto] items-start px-8 pt-3 sm:min-h-[138px] sm:pt-6 sm:px-10">
             <div />
             <div />
           </header>
 
-          <div className="blog-scroll flex-1 overflow-y-auto lg:min-h-0">
+          <div className="flex-1">
             {selectedPost ? (
               <article className="min-h-full px-8 py-3 sm:px-10 sm:py-8 lg:px-12 lg:py-10">
                 <div className="max-w-[980px]">

@@ -40,7 +40,7 @@ export default function AdminPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loadingAuth, setLoadingAuth] = useState(true);
-  const [posts, setPosts] = useState(fallbackPosts);
+  const [posts, setPosts] = useState(() => (isSupabaseConfigured ? [] : fallbackPosts));
   const [form, setForm] = useState({ ...emptyForm, content: starterMarkdown });
   const [selectedId, setSelectedId] = useState("");
   const [status, setStatus] = useState("");
