@@ -155,14 +155,30 @@ export default function AdminPage() {
     const sortedPosts = sortPosts(data || []);
     setPosts(sortedPosts);
 
-    const requestedSlug =
-      searchParams.get("post") || window.sessionStorage.getItem(ADMIN_LAST_POST_KEY);
+    const savedDraft = window.sessionStorage.getItem(ADMIN_DRAFT_KEY);
+    let hasNewDraft = false;
+
+    if (savedDraft) {
+      try {
+        const parsedDraft = JSON.parse(savedDraft);
+        hasNewDraft = parsedDraft?.mode === "new";
+      } catch {
+        window.sessionStorage.removeItem(ADMIN_DRAFT_KEY);
+      }
+    }
+
+    const requestedSlug = searchParams.get("post")
+      || (hasNewDraft ? null : window.sessionStorage.getItem(ADMIN_LAST_POST_KEY));
     const requestedPost = requestedSlug
       ? sortedPosts.find((post) => post.slug === requestedSlug)
       : null;
 
     if (requestedPost) {
       selectPost(requestedPost, { syncUrl: false });
+      return sortedPosts;
+    }
+
+    if (hasNewDraft && !searchParams.get("post")) {
       return sortedPosts;
     }
 
