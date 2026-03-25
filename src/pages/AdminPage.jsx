@@ -2,7 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import MarkdownRenderer from "../components/MarkdownRenderer";
 import { fallbackPosts } from "../data/fallbackPosts";
-import { formatDate, makeSlug, sortPosts } from "../lib/format";
+import {
+  formatDate,
+  getLocalDateInputValue,
+  makeSlug,
+  sortPosts,
+  toStoredLocalDate,
+} from "../lib/format";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
 
 const emptyForm = {
@@ -14,7 +20,7 @@ const emptyForm = {
   pinned: false,
   content: "",
   published: true,
-  published_at: new Date().toISOString().slice(0, 10),
+  published_at: getLocalDateInputValue(),
 };
 
 const starterMarkdown = `> TL;DR add the thought before it disappears
@@ -123,7 +129,7 @@ export default function AdminPage() {
         setForm({
           ...emptyForm,
           ...parsed.form,
-          published_at: parsed.form?.published_at || new Date().toISOString().slice(0, 10),
+          published_at: parsed.form?.published_at || getLocalDateInputValue(),
         });
       }
     } catch {
@@ -202,7 +208,7 @@ export default function AdminPage() {
       pinned: Boolean(post.pinned),
       content: post.content || "",
       published: Boolean(post.published),
-      published_at: (post.published_at || "").slice(0, 10),
+      published_at: post.published_at ? getLocalDateInputValue(post.published_at) : "",
     });
     setStatus("");
     setError("");
@@ -223,7 +229,7 @@ export default function AdminPage() {
     const nextForm = {
       ...emptyForm,
       content: starterMarkdown,
-      published_at: new Date().toISOString().slice(0, 10),
+      published_at: getLocalDateInputValue(),
     };
 
     setForm(nextForm);
@@ -302,7 +308,7 @@ export default function AdminPage() {
       pinned: form.pinned,
       content: form.content,
       published: form.published,
-      published_at: new Date(form.published_at || new Date()).toISOString(),
+      published_at: toStoredLocalDate(form.published_at) || new Date().toISOString(),
     };
 
     if (!payload.title || !payload.slug || !payload.content.trim()) {

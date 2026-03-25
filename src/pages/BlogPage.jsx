@@ -17,6 +17,7 @@ export default function BlogPage() {
   const [error, setError] = useState("");
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 1024);
 
+  const sortedPosts = sortPosts(posts);
   const activeFilter = searchParams.get("category") || "daily";
   const activePosts = sortPosts(posts.filter((post) => post.category === activeFilter));
   const selectedSlug = searchParams.get("post");
@@ -25,6 +26,7 @@ export default function BlogPage() {
     : isMobile
       ? null
       : activePosts[0] || null;
+  const latestPost = sortedPosts[0] || null;
 
   useEffect(() => {
     async function loadPosts() {
@@ -174,7 +176,7 @@ export default function BlogPage() {
               Ivy&apos;s Sandbox
             </div>
             <div className="border-l border-[#cfc2a4] px-8 py-5 text-[1.02rem] font-medium leading-[1.9] text-[#b9ae95]">
-              Last updated {formatDate(selectedPost?.updated_at || selectedPost?.published_at)}
+              Last updated {formatDate(latestPost?.updated_at || latestPost?.published_at)}
             </div>
           </footer>
         </aside>
